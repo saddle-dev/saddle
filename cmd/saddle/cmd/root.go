@@ -8,8 +8,6 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-
-	"github.com/saddle-dev/saddle/cmd/saddle/cmd/version"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -36,7 +34,7 @@ func Execute() {
 }
 
 func addSubCommandPalettes() {
-	rootCmd.AddCommand(version.VersionCmd)
+	rootCmd.AddCommand(VersionCmd)
 }
 
 func init() {
