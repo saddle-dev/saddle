@@ -22,6 +22,22 @@ func loadTxTar(file string) []*build.Instance {
 	return insts
 }
 
+func walker(val cue.Value) bool {
+	targetPath := cue.MakePath(cue.Hid("_y", "banana.com/p"))
+
+	fmt.Println(val.Path(), "-", val.Kind())
+
+	if val.Kind() == cue.StructKind {
+		if c := val.LookupPath(targetPath); c.Exists() {
+			fmt.Printf("we found _y: %v\n", c)
+		} else {
+			fmt.Println("we did not find _y")
+		}
+	}
+
+	return true
+}
+
 func main() {
 	const file = `
 -- cue.mod/module.cue --
@@ -32,7 +48,7 @@ package x
 
 import "banana.com/p"
 
-x: p.#Def & {
+foo: p.#Def & {
 	y: 4
 }
 
@@ -41,18 +57,15 @@ package p
 
 #Def: {
 	_y: 4
-	y: 4
+	y: int
 }
 `
 	ctx := cuecontext.New()
 	bps := loadTxTar(file)
 
-	v := ctx.BuildInstance(bps[0]).LookupPath(cue.ParsePath("x"))
-
-	targetPath := cue.MakePath(cue.Hid("_y", "banana.com/p"))
-	if c := v.LookupPath(targetPath); c.Exists() {
-		fmt.Printf("we found it: %v\n", c)
-	} else {
-		fmt.Println("we did not find it")
-	}
+	v := ctx.BuildInstance(bps[0]).LookupPath(cue.ParsePath(""))
+	fmt.Println("Instance -", bps[0].ID())
+	fmt.Println("Concrete?", v.IsConcrete())
+	fmt.Println("Error?", v.Validate())
+	v.Walk(walker, nil)
 }
