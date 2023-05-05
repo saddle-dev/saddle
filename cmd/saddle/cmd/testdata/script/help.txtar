@@ -1,0 +1,30 @@
+# Test `saddle help`
+exec saddle help
+cmp stdout golden.txt
+
+# Test `saddle --help`
+exec saddle help
+cmp stdout golden.txt
+
+-- golden.txt --
+saddle manages application configuration in a single language, CUE.
+Users supply configuration data provided by libraries and validated against
+schemas. saddle will then generate the files in the correct format.
+
+saddle makes it simple to manage configuration for multiple tools and apply
+them consistently across one to many repositories.
+
+For more information on using saddle to manage code see saddle.dev.
+
+Usage:
+  saddle [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  version     Prints CLI version
+
+Flags:
+  -h, --help   help for saddle
+
+Use "saddle [command] --help" for more information about a command.

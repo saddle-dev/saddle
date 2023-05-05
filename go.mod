@@ -5,6 +5,7 @@ go 1.18
 require (
 	cuelang.org/go v0.4.3
 	github.com/google/go-cmp v0.4.0
+	github.com/rogpeppe/go-internal v1.10.0
 	github.com/spf13/cobra v1.6.1
 	golang.org/x/tools v0.0.0-20200612220849-54c614fe050c
 )
