@@ -37,6 +37,7 @@ For more information on using saddle to manage code see saddle.dev.`,
 
 func addSubCommandPalettes() {
 	setupVersionCommand(rootCmd)
+	setupUpCommand(rootCmd)
 }
 
 func setupRootCommand() {
