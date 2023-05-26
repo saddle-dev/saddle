@@ -1,3 +1,29 @@
+# Test `saddle up`
+exec saddle up
+cmp stdout golden.txt
+
+# Test `saddle up .saddle`
+exec saddle up .saddle/
+cmp stdout golden.txt
+
+-- golden.txt --
+.saddle/
+-- .saddle/x.cue --
+package x
+
+import "github.com/saddle-dev/saddle"
+
+manifest: saddle.#Manifest
+manifest: files: foo: saddle.#File & {
+	path:	".prettierrc"
+	format: "YAML"
+	content: "{}"
+}
+
+-- cue.mod/module.cue --
+module: "example.com/test"
+
+-- cue.mod/pkg/github.com/saddle-dev/saddle/saddle.cue --
 package saddle
 
 // A Manifest defines mappings between configurations and files

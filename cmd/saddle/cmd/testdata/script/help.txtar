@@ -22,6 +22,7 @@ Usage:
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
+  up          Sync CUE definitions to application configurations
   version     Prints CLI version
 
 Flags:
