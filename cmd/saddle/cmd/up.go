@@ -19,6 +19,16 @@ func setupUpCommand(cmd *cobra.Command) {
 	cmd.AddCommand(upCmd)
 }
 
+type manifest struct {
+	Files map[string]file
+}
+
+type file struct {
+	Path    string
+	Format  string
+	Content string
+}
+
 func runUp(cmd *cobra.Command, args []string) error {
 	dir := defaultPkg
 	if len(args) > 0 {
@@ -27,16 +37,22 @@ func runUp(cmd *cobra.Command, args []string) error {
 
 	ctx := cuecontext.New()
 	store := newStore(dir, ctx)
-	manifest, err := store.manifest()
+	mn, err := store.manifest()
 	if err != nil {
 		return err
 	}
 
-	if err = manifest.Validate(); err != nil {
+	if err = mn.Validate(); err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println(manifest)
+	// log.Println(mn)
+	var manifest manifest
+	err = mn.Decode(&manifest)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// log.Println(manifest)
 
 	return nil
 }

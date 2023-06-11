@@ -7,7 +7,6 @@ exec saddle up .saddle/
 cmp stdout golden.txt
 
 -- golden.txt --
-.saddle/
 -- .saddle/x.cue --
 package x
 
