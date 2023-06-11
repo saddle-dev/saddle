@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"log"
 
 	"cuelang.org/go/cue/cuecontext"
@@ -53,6 +56,56 @@ func runUp(cmd *cobra.Command, args []string) error {
 		log.Fatal(err)
 	}
 	// log.Println(manifest)
+
+	err = sync(manifest)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nil
+}
+
+func sync(mn manifest) error {
+	for _, file := range mn.Files {
+		var err error
+		// log.Println(file)
+
+		switch file.Format {
+		case "JSON":
+			err = writeJSON(file)
+		case "YAML":
+			err = writeYAML(file)
+		default:
+			// Should not happen if CUE validates inputs
+			return errors.New("Invalid file type")
+		}
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func writeJSON(file file) error {
+	fmt.Println("Writing JSON file to", file.Path)
+
+	err := ioutil.WriteFile(file.Path, []byte(file.Content), 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func writeYAML(file file) error {
+	fmt.Println("Writing YAML file to", file.Path)
+
+	err := ioutil.WriteFile(file.Path, []byte(file.Content), 0644)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
