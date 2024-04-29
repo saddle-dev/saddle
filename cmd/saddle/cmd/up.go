@@ -23,10 +23,10 @@ func setupUpCommand(cmd *cobra.Command) {
 }
 
 type manifest struct {
-	Files map[string]file
+	Paths map[string]config
 }
 
-type file struct {
+type config struct {
 	Path    string
 	Format  string
 	Content string
@@ -66,7 +66,7 @@ func runUp(cmd *cobra.Command, args []string) error {
 }
 
 func sync(mn manifest) error {
-	for _, file := range mn.Files {
+	for _, file := range mn.Paths {
 		var err error
 		// log.Println(file)
 
@@ -88,7 +88,7 @@ func sync(mn manifest) error {
 	return nil
 }
 
-func writeJSON(file file) error {
+func writeJSON(file config) error {
 	fmt.Println("Writing JSON file to", file.Path)
 
 	err := ioutil.WriteFile(file.Path, []byte(file.Content), 0644)
@@ -99,7 +99,7 @@ func writeJSON(file file) error {
 	return nil
 }
 
-func writeYAML(file file) error {
+func writeYAML(file config) error {
 	fmt.Println("Writing YAML file to", file.Path)
 
 	err := ioutil.WriteFile(file.Path, []byte(file.Content), 0644)
